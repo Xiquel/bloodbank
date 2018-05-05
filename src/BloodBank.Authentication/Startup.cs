@@ -13,6 +13,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using BloodBank.Core.Infrastructure;
 using BloodBank.Authentication.Framework;
 using BloodBank.Authentication.Models;
+using Dotnet.Microservice.Netcore;
 
 namespace BloodBank.Authentication
 {
@@ -70,6 +71,7 @@ namespace BloodBank.Authentication
             var settings = new RabbitMqSettings();
             configuration.Bind("RabbitMq", settings);
             services.AddRabbitMq(settings);
+            HealthChecker.AddHealthChecks(configuration);
 
         }
 
@@ -90,6 +92,7 @@ namespace BloodBank.Authentication
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;
             });
+            app.UseHealthEndpoint();
             app.UseMvc();
         }
         private void InitializeDatabase(IApplicationBuilder app)
